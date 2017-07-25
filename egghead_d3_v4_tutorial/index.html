@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Egghead D3 v4</title>
+  <script src="//d3js.org/d3.v4.min.js"></script>
+  <style>
+    .chart {
+      background: lightgray;
+      border: 1px solid black;
+    }
+    rect {
+      fill: steelblue;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="chart"></div>
+
+  <button onclick="render('math')">Math</button>
+  <button onclick="render('science')">Science</button>
+  <button onclick="render('language')">Language</button>
+
+  <script src="src/animate_with_general_update_pattern_app.js"></script>
+</body>
+</html>
