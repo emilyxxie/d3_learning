@@ -52,34 +52,52 @@ function render(subject) {
   var update = svg.selectAll('rect')
     // makes it so that the only data within this function call that we are considering
     // is the data for that subject
-    .data(data.filter(d => d[subject]))
+    .data(data.filter(d => d[subject]), d => d.name);
 
   // gets rid of elements that we don't need
+  // an exit selection is a DOM elemetn whose
+  // corresponding data item is not in the data
   update.exit()
     .transition(trn)
+    // in this animation,
+    // the y attribute of the rectangles will be set to the height
+    // of our chart (which is at the very bottom) of the chart grid thingy
+    // and the height attribute will be set to 0
+    // which means that they will shrink
+    // so, these things rectanlges will simulanteously
+    // shrink down and disappear.
     .attr('y', height)
-    .attr('x', 0)
+    .attr('height', 0)
+    // and once the slide out animation is finally done
+    // THEN the exit elements will actually be removed.
     .remove();
 
+  // and THEN, we want to update any remaining items on the chart.
   update
     .transition(trn)
-    .delay(1000)
+    // we want to make sure this happens AFTER our exit transition
+    // but I've commented it out because I don't like ths delay. :-)
+    // .delay(1000)
+    // existing values will transition into the update values
     .attr('y', d => yScale(d[subject]))
     .attr('height', d => height - yScale(d[subject]));
 
   update
     .enter()
     .append('rect')
-    .attr('y', height)
-    .attr('x', 0)
+    // new items will appear originally at y height, and height of 0
+    // which means they begin at the bottom of the graph
     .attr('x', d => xScale(d.name))
-    .attr('y', d => yScale(d[subject]))
+    .attr('y', height)
     .attr('width', d => xScale.bandwidth())
-    .attr('height', d => height - yScale(d[subject]))
-    .transition(t)
-    .delay(2000)
+    .transition(trn)
+    // this delay ensures that the update happens immediately upon load
+    // and delay of 2 seconds if we are not immediately loading
+    // but I've canceled it out because i want everything to happen in one fell
+    // swoop
+    // .delay(update.exit().size() ? 1000 : 0)
     .attr('y', d => yScale(d[subject]))
-    .attr()
+    .attr('height', d => height - yScale(d[subject]));
 
 }
 
